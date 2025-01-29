@@ -21,4 +21,11 @@ app.use(
   })
 );
 
+app.use(express.json());
+
+//import router
+
+const router = require('./routes');
+app.use('/api', router);
+
 module.exports = app;
