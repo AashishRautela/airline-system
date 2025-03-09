@@ -2,7 +2,6 @@ const sequelize = require('./database/database.js');
 require('dotenv').config();
 const { logger, port } = require('./config/index.js');
 const app = require('./app.js');
-const Airplane = require('./models/Airplane.model.js');
 
 async function startServer() {
   try {

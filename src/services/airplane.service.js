@@ -2,7 +2,7 @@ const { StatusCodes } = require('http-status-codes');
 const { AirplaneRepository } = require('../repositories');
 const AppError = require('../utils/errors/appError');
 
-const createAirplane = async (data) => {
+const create = async (data) => {
   try {
     const airplane = await AirplaneRepository.create(data);
     return airplane;
@@ -17,4 +17,4 @@ const createAirplane = async (data) => {
   }
 };
 
-module.exports = { createAirplane };
+module.exports = { create };

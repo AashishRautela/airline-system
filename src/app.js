@@ -26,7 +26,7 @@ app.use(express.urlencoded());
 
 //import router
 
-const router = require('./routes');
-app.use('/api', router);
+const router = require('./routes/index.js');
+app.use('/', router);
 
 module.exports = app;
