@@ -13,7 +13,7 @@ const createAirplane = async (req, res) => {
       });
     }
 
-    const airplane = await AirplaneService.createAirplane({
+    const airplane = await AirplaneService.create({
       model_number,
       capacity
     });

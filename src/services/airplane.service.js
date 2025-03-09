@@ -7,13 +7,18 @@ const create = async (data) => {
     const airplane = await AirplaneRepository.create(data);
     return airplane;
   } catch (error) {
-    if (error.name == 'TypeError') {
-      throw new AppError(
-        'Something went wrong while creating error',
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+    if (error.name == 'SequelizeValidationError') {
+      let explaination = [];
+      error.errors.forEach((err) => {
+        explaination.push(err.message);
+      });
+      throw new AppError(explaination, StatusCodes.BAD_REQUEST);
     }
-    throw error;
+
+    throw new AppError(
+      'Something went wrong while creating aiplane',
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
