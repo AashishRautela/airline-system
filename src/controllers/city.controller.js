@@ -22,4 +22,36 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const bulkCreate = async (req, res) => {
+  try {
+    const { cities } = req.body; // Expect an array of city names
+
+    if (!Array.isArray(cities) || cities.length === 0) {
+      throw new AppError(['Request Data missing'], StatusCodes.BAD_REQUEST);
+    }
+
+    const validCities = cities
+      .map((city) => city.name.trim())
+      .filter((name) => name.length > 0)
+      .map((name) => ({ name }));
+
+    if (validCities.length === 0) {
+      throw new AppError(
+        ['No valid city names provided'],
+        StatusCodes.BAD_REQUEST
+      );
+    }
+
+    const createdCities = await CityService.bulkCreateCities(validCities);
+
+    SuccessResponse.data = createdCities;
+    return res.status(StatusCodes.CREATED).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+module.exports = { create, bulkCreate };

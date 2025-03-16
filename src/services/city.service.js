@@ -28,4 +28,32 @@ const createCity = async (data) => {
   }
 };
 
-module.exports = { createCity };
+const bulkCreateCities = async (cities) => {
+  try {
+    const createdCities = await CityRepository.bulkCreate(cities, {
+      ignoreDuplicates: true
+    }); // Ignore duplicate records
+    return createdCities;
+  } catch (error) {
+    let errorMessages = [];
+
+    if (error.name === 'SequelizeValidationError') {
+      errorMessages.push(...error.errors.map((err) => err.message));
+    }
+
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      errorMessages.push(...error.errors.map((err) => err.message));
+    }
+
+    if (errorMessages.length > 0) {
+      throw new AppError(errorMessages, StatusCodes.BAD_REQUEST);
+    }
+
+    throw new AppError(
+      ['Something went wrong while creating cities'],
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
+module.exports = { createCity, bulkCreateCities };
