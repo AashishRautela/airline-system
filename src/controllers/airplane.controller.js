@@ -1,45 +1,104 @@
 const { StatusCodes } = require('http-status-codes');
 const { AirplaneService } = require('../services');
 const { ErrorResponse, SuccessResponse } = require('../utils/common');
+const AppError = require('../utils/errors/appError');
+const { json } = require('sequelize');
 
 const createAirplane = async (req, res) => {
   try {
-    const { model_number, capacity } = req.body;
-    if (!model_number) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        ...ErrorResponse,
-        message: 'Something went wrong while creating airplane',
-        error: { explanation: 'Model Number is required' }
-      });
+    const { modelNumber, capacity } = req.body;
+    if (!modelNumber) {
+      throw new AppError(['Model Number is required'], StatusCodes.BAD_REQUEST);
     }
 
     const airplane = await AirplaneService.create({
-      model_number,
+      modelNumber,
       capacity
     });
 
-    if (!airplane) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        ...ErrorResponse,
-        message: 'Failed to create airplane',
-        error: { explanation: 'Unable to create airplane' }
-      });
-    }
-
-    return res.status(StatusCodes.CREATED).json({
-      ...SuccessResponse,
-      message: 'Airplane created successfully',
-      data: airplane
-    });
+    SuccessResponse.data = airplane;
+    return res.status(StatusCodes.CREATED).json(SuccessResponse);
   } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+const getAirPlaneDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new AppError(['Request Data Missing'], StatusCodes.BAD_REQUEST);
+    }
+    const airplane = await AirplaneService.getAirplane(id);
+    SuccessResponse.data = airplane;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+const deleteAirPlane = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new AppError(['Request Data Missing'], StatusCodes.BAD_REQUEST);
+    }
+    const airplane = await AirplaneService.deleteAirPlane(id);
+    SuccessResponse.data = airplane;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+const getAllAirplanes = async (req, res) => {
+  try {
+    const airplanes = await AirplaneService.getAllAirplanes();
+    SuccessResponse.data = airplanes;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
     return res
       .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
       .json({
-        ...ErrorResponse,
-        message: 'Failed to create airplane',
-        error: error
+        ErrorResponse
       });
   }
 };
 
-module.exports = { createAirplane };
+const updateAirplane = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const airplane = await AirplaneService.updateAirplane(id, data);
+    SuccessResponse.data = airplane;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        ErrorResponse
+      });
+  }
+};
+
+module.exports = {
+  createAirplane,
+  getAirPlaneDetails,
+  deleteAirPlane,
+  getAllAirplanes,
+  updateAirplane
+};
