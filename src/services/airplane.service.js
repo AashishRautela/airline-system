@@ -17,7 +17,6 @@ const create = async (data) => {
       errorMessages.push(...error.errors.map((err) => err.message));
     }
 
-    console.log('errorMessages--->', errorMessages);
     if (errorMessages.length > 0) {
       throw new AppError(errorMessages, StatusCodes.BAD_REQUEST);
     }
@@ -88,6 +87,9 @@ const updateAirplane = async (id, data) => {
     const airplane = await AirplaneRepository.update(id, fieldsToBeUpdated);
     return airplane;
   } catch (error) {
+    if (error.statusCode === StatusCodes.NOT_FOUND) {
+      throw new AppError(['Aiplane not found'], StatusCodes.NOT_FOUND);
+    }
     throw new AppError(
       ['Something went wrong while updating airplane'],
       StatusCodes.INTERNAL_SERVER_ERROR
