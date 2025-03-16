@@ -7,7 +7,7 @@ const create = async (req, res) => {
   try {
     const { name } = req.body;
 
-    if (!name.trim()) {
+    if (!name) {
       throw new AppError(['Request Data missing'], StatusCodes.BAD_REQUEST);
     }
 
