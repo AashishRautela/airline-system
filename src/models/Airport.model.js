@@ -1,6 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../database/database.js');
-const City = require('./City.model.js');
 
 class Airport extends Model {}
 
@@ -34,11 +33,9 @@ Airport.init(
   {
     sequelize,
     modelName: 'Airport',
-    tableName: 'Airport',
+    tableName: 'airports',
     timestamps: true
   }
 );
 
-Airport.belongsTo(City, { foreignKey: 'cityId' });
-City.hasMany(Airport, { foreignKey: 'cityId' });
 module.exports = Airport;
