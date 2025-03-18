@@ -54,4 +54,21 @@ const bulkCreate = async (req, res) => {
   }
 };
 
-module.exports = { create, bulkCreate };
+const getCityDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      throw new AppError(['Requied data missing'], StatusCodes.BAD_REQUEST);
+    }
+    const city = await CityService.getCityDetails(id);
+    SuccessResponse.data = city;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+module.exports = { create, bulkCreate, getCityDetails };

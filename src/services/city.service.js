@@ -56,4 +56,19 @@ const bulkCreateCities = async (cities) => {
   }
 };
 
-module.exports = { createCity, bulkCreateCities };
+const getCityDetails = async (data) => {
+  try {
+    const city = await CityRepository.get(data);
+    return city;
+  } catch (error) {
+    if (error.statusCode == StatusCodes.NOT_FOUND) {
+      throw new AppError(['City not found'], StatusCodes.NOT_FOUND);
+    }
+    throw new AppError(
+      ['Something went wrong while getting city details'],
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
+module.exports = { createCity, bulkCreateCities, getCityDetails };
