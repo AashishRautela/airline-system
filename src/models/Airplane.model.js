@@ -28,7 +28,7 @@ Airplane.init(
   {
     sequelize,
     modelName: 'Airplane',
-    tableName: 'airplanes',
+    tableName: 'Airplanes',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at'

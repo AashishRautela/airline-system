@@ -2,7 +2,6 @@ const { StatusCodes } = require('http-status-codes');
 const { AirplaneService } = require('../services');
 const { ErrorResponse, SuccessResponse } = require('../utils/common');
 const AppError = require('../utils/errors/appError');
-const { json } = require('sequelize');
 
 const createAirplane = async (req, res) => {
   try {
