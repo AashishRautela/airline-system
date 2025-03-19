@@ -14,7 +14,10 @@ Airplane.init(
     modelNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isAlphanumeric: true
+      }
     },
     capacity: {
       type: DataTypes.INTEGER,

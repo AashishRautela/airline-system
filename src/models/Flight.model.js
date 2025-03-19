@@ -11,7 +11,7 @@ Flight.init(
       primaryKey: true,
       allowNull: false,
       validate: {
-        max: 20
+        len: [1, 20] // ✅ Fixed validation
       }
     },
     airplaneId: {
@@ -19,11 +19,11 @@ Flight.init(
       allowNull: false
     },
     departureAirportId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     arrivalAirportId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false
     },
     departureTime: {
@@ -35,10 +35,13 @@ Flight.init(
       allowNull: false
     },
     boardingGate: {
-      type: DataTypes.INTEGER
+      // ✅ Changed to STRING
+      type: DataTypes.STRING
     },
     price: {
-      type: DataTypes.STRING
+      // ✅ Changed to DECIMAL(10,2)
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false
     },
     totalSeats: {
       type: DataTypes.INTEGER,

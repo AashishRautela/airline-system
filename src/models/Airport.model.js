@@ -5,25 +5,21 @@ class Airport extends Model {}
 
 Airport.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      unique: true,
-      allowNull: false,
+    code: {
+      // ✅ Removed `id`, `code` is now primary key
+      type: DataTypes.STRING,
       primaryKey: true,
-      autoIncrement: true
+      unique: true,
+      allowNull: false
     },
     name: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false
     },
-    code: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: true
-    },
     address: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      defaultValue: ''
     },
     cityId: {
       type: DataTypes.INTEGER,

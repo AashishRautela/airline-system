@@ -3,32 +3,35 @@ const City = require('./City.model.js');
 const Airport = require('./Airport.model.js');
 const Flight = require('./Flight.model.js');
 
-// ✅ Define Associations Here
+// ✅ Airplane to Flight Relationship
 Airplane.hasMany(Flight, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
 Flight.belongsTo(Airplane, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
 
+// ✅ Airport to Flight (Departure)
 Airport.hasMany(Flight, {
   foreignKey: 'departureAirportId',
-  as: 'departingFlights',
+  sourceKey: 'code',
   onDelete: 'CASCADE'
 });
 Flight.belongsTo(Airport, {
   foreignKey: 'departureAirportId',
-  as: 'departureAirport',
+  targetKey: 'code',
   onDelete: 'CASCADE'
 });
 
+// ✅ Airport to Flight (Arrival)
 Airport.hasMany(Flight, {
   foreignKey: 'arrivalAirportId',
-  as: 'arrivingFlights',
+  sourceKey: 'code',
   onDelete: 'CASCADE'
 });
 Flight.belongsTo(Airport, {
   foreignKey: 'arrivalAirportId',
-  as: 'arrivalAirport',
+  targetKey: 'code',
   onDelete: 'CASCADE'
 });
 
+// ✅ Airport to City Relationship
 Airport.belongsTo(City, { foreignKey: 'cityId', onDelete: 'CASCADE' });
 City.hasMany(Airport, { foreignKey: 'cityId', onDelete: 'CASCADE' });
 
