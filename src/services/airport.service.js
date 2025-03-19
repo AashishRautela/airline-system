@@ -70,8 +70,7 @@ const getAllAirports = async () => {
 
 const updateAirport = async (id, data) => {
   try {
-    const allowedFields = ['capacity'];
-
+    const allowedFields = ['address'];
     const fieldsToBeUpdated = allowedFields.reduce((acc, field) => {
       if (Object.keys(data).includes(field)) {
         acc[field] = data[field];

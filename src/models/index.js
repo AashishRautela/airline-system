@@ -10,24 +10,20 @@ Flight.belongsTo(Airplane, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
 // ✅ Airport to Flight (Departure)
 Airport.hasMany(Flight, {
   foreignKey: 'departureAirportId',
-  sourceKey: 'code',
   onDelete: 'CASCADE'
 });
 Flight.belongsTo(Airport, {
   foreignKey: 'departureAirportId',
-  targetKey: 'code',
   onDelete: 'CASCADE'
 });
 
 // ✅ Airport to Flight (Arrival)
 Airport.hasMany(Flight, {
   foreignKey: 'arrivalAirportId',
-  sourceKey: 'code',
   onDelete: 'CASCADE'
 });
 Flight.belongsTo(Airport, {
   foreignKey: 'arrivalAirportId',
-  targetKey: 'code',
   onDelete: 'CASCADE'
 });
 

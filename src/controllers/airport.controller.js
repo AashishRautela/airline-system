@@ -29,11 +29,11 @@ const createAirplane = async (req, res) => {
 
 const getAirportDetails = async (req, res) => {
   try {
-    const { code } = req.params;
-    if (!code) {
+    const { id } = req.params;
+    if (!id) {
       throw new AppError(['Request Data Missing'], StatusCodes.BAD_REQUEST);
     }
-    const airport = await AirportService.getAirport(code);
+    const airport = await AirportService.getAirport(id);
     SuccessResponse.data = airport;
     return res.status(StatusCodes.OK).json(SuccessResponse);
   } catch (error) {
@@ -82,7 +82,7 @@ const updateAirport = async (req, res) => {
     const { id } = req.params;
     const data = req.body;
 
-    const airport = await AirportService.updateAirport(id, data.updateAirport);
+    const airport = await AirportService.updateAirport(id, data);
     SuccessResponse.data = airport[0];
 
     return res.status(StatusCodes.OK).json(SuccessResponse);

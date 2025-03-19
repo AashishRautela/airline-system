@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/', AirportController.createAirplane);
 router.get('/', AirportController.getAllAirports);
-router.get('/:code', AirportController.getAirportDetails);
+router.get('/:id', AirportController.getAirportDetails);
 router.delete('/:id', AirportController.deleteAirPort);
 router.patch('/:id', AirportController.updateAirport);
 
