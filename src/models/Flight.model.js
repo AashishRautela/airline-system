@@ -5,10 +5,16 @@ class Flight extends Model {}
 
 Flight.init(
   {
+    id: {
+      // ✅ Primary Key
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
     flightNumber: {
       type: DataTypes.STRING,
       unique: true,
-      primaryKey: true,
       allowNull: false,
       validate: {
         len: [1, 20]
@@ -19,12 +25,22 @@ Flight.init(
       allowNull: false
     },
     departureAirportId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: 'airports',
+        key: 'code'
+      },
+      onDelete: 'CASCADE'
     },
     arrivalAirportId: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: 'airports',
+        key: 'code'
+      },
+      onDelete: 'CASCADE'
     },
     departureTime: {
       type: DataTypes.DATE,
