@@ -13,7 +13,7 @@ const createAirplane = async (req, res) => {
     const airport = await AirportService.createAirport({
       name,
       cityId,
-      code,
+      code: code.toLowerCase(),
       address
     });
     SuccessResponse.data = airport;

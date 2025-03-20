@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const { FlightService } = require('../services');
 const AppError = require('../utils/errors/appError');
-const { SuccessResponse } = require('../utils/common');
+const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
 const createFlight = async (req, res) => {
   try {
@@ -50,4 +50,17 @@ const createFlight = async (req, res) => {
   }
 };
 
-module.exports = { createFlight };
+const getAllFlights = async (req, res) => {
+  try {
+    const flights = await FlightService.getAllFlights(req.query);
+    SuccessResponse.data = flights;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+module.exports = { createFlight, getAllFlights };
