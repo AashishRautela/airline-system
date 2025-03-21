@@ -31,13 +31,6 @@ class FlightRepository extends CrudRepository {
           include: {
             model: City,
             required: true,
-            on: {
-              col1: Sequelize.where(
-                Sequelize.col('DepartureAirport.cityId'),
-                '=',
-                Sequelize.col('DepartureAirport.City.id')
-              )
-            },
             attributes: { exclude: ['id', 'created_at', 'updated_at', 'id'] }
           }
         },
@@ -56,17 +49,18 @@ class FlightRepository extends CrudRepository {
           include: {
             model: City,
             required: true,
-            on: {
-              col1: Sequelize.where(
-                Sequelize.col('ArrivalAirport.cityId'),
-                '=',
-                Sequelize.col('ArrivalAirport.City.id')
-              )
-            },
+            // on: {
+            //   col1: Sequelize.where(
+            //     Sequelize.col('ArrivalAirport.cityId'),
+            //     '=',
+            //     Sequelize.col('ArrivalAirport.City.id')
+            //   )
+            // },
             attributes: { exclude: ['id', 'created_at', 'updated_at', 'id'] }
           }
         }
-      ]
+      ],
+      attributes: { exclude: ['createdAt', 'updatedAt'] }
     });
 
     return flights;
