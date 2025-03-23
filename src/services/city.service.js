@@ -32,7 +32,7 @@ const bulkCreateCities = async (cities) => {
   try {
     const createdCities = await CityRepository.bulkCreate(cities, {
       ignoreDuplicates: true
-    }); // Ignore duplicate records
+    });
     return createdCities;
   } catch (error) {
     let errorMessages = [];
