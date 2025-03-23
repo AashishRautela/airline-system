@@ -2,6 +2,7 @@ const Airplane = require('./Airplane.model.js');
 const City = require('./City.model.js');
 const Airport = require('./Airport.model.js');
 const Flight = require('./Flight.model.js');
+const Seat = require('./Seat.model.js');
 
 Airplane.hasMany(Flight, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
 Flight.belongsTo(Airplane, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
@@ -34,6 +35,10 @@ Airport.hasMany(Flight, {
   as: 'ArrivalAirportFlights'
 });
 
+// association between flight and seat
+Seat.belongsTo(Airplane, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
+Airplane.hasMany(Seat, { foreignKey: 'airplaneId', onDelete: 'CASCADE' });
+
 Airport.belongsTo(City, { foreignKey: 'cityId', onDelete: 'CASCADE' });
 City.hasMany(Airport, { foreignKey: 'cityId', onDelete: 'CASCADE' });
 
@@ -41,5 +46,6 @@ module.exports = {
   Airplane,
   City,
   Airport,
-  Flight
+  Flight,
+  Seat
 };
