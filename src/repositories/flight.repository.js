@@ -2,6 +2,8 @@ const CrudRepository = require('./crud.repository.js');
 const { Flight, Airplane, Airport, City } = require('../models');
 const { Sequelize } = require('sequelize');
 const sequelize = require('../database/database.js');
+const AppError = require('../utils/errors/appError.js');
+const { StatusCodes } = require('http-status-codes');
 
 class FlightRepository extends CrudRepository {
   constructor() {
@@ -127,6 +129,10 @@ class FlightRepository extends CrudRepository {
           transaction
         }
       );
+
+      if (!results) {
+        throw new AppError(['Flight not found'], StatusCodes.BAD_REQUEST);
+      }
 
       let flight;
       if (dec) {
