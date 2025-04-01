@@ -63,4 +63,24 @@ const getAllFlights = async (req, res) => {
   }
 };
 
-module.exports = { createFlight, getAllFlights };
+const getFlight = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw new AppError(['Request data missing'], StatusCodes.BAD_REQUEST);
+    }
+
+    const flight = await FlightService.getFlight(id);
+    SuccessResponse.data = flight;
+
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+module.exports = { createFlight, getAllFlights, getFlight };

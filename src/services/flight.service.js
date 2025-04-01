@@ -92,4 +92,28 @@ const getAllFlights = async (query) => {
   }
 };
 
-module.exports = { createFlight, getAllFlights };
+const getFlight = async (data) => {
+  try {
+    const flight = await FlightRepository.getFlightDetails(data);
+    return flight;
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    let errorMessages = [];
+
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      errorMessages.push(...error.errors.map((err) => err.message));
+    }
+    if (errorMessages.length > 0) {
+      throw new AppError(errorMessages, StatusCodes.BAD_REQUEST);
+    }
+    throw new AppError(
+      ['Something went wrong while creating flight'],
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
+module.exports = { createFlight, getAllFlights, getFlight };
