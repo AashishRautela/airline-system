@@ -83,4 +83,35 @@ const getFlight = async (req, res) => {
   }
 };
 
-module.exports = { createFlight, getAllFlights, getFlight };
+const updateFlightSeats = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { seats } = req.body;
+
+    if (!id || !seats) {
+      ErrorResponse.message =
+        'Something went wrong while updating flight seats ';
+      ErrorResponse.error = new AppError(
+        ['Request data missing'],
+        StatusCodes.BAD_REQUEST
+      );
+      return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    }
+
+    const flight = await FlightService.updateRemainingSeats({
+      flightId: id,
+      seats: req.body.seats,
+      dec: req.body.dec
+    });
+
+    SuccessResponse.data = {};
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(ErrorResponse);
+  }
+};
+
+module.exports = { createFlight, getAllFlights, getFlight, updateFlightSeats };
