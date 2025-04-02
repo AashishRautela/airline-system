@@ -122,7 +122,7 @@ class FlightRepository extends CrudRepository {
   async updateRemainingSeats(flightId, seats, dec = true) {
     return await sequelize.transaction(async (transaction) => {
       const [results] = await sequelize.query(
-        `SELECT * FROM flights WHERE flights.id = :flightId FOR UPDATE`,
+        `SELECT * FROM flights WHERE flights.id = :flightId FOR UPDATE`, //it tells that lock the row till the trasaction is not completed
         {
           replacements: { flightId },
           type: sequelize.QueryTypes.SELECT,
@@ -132,6 +132,13 @@ class FlightRepository extends CrudRepository {
 
       if (!results) {
         throw new AppError(['Flight not found'], StatusCodes.BAD_REQUEST);
+      }
+      const flightData = results;
+      if (dec && flightData.totalSeats < seats) {
+        throw new AppError(
+          ['Not enough seats remaining'],
+          StatusCodes.BAD_REQUEST
+        );
       }
 
       let flight;
